@@ -1,6 +1,5 @@
 import sys
 import os
-# git commit -m "Complete interactive BI dashboard with filters, KPIs, charts, insights, and polished UI"
 # Add project root to Python path
 # This allows us to import modules from config/
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
@@ -67,7 +66,6 @@ def load_data():
 invoices, invoice_line_detail = load_data()
 
 
-
 # -------------------------------------------------------------------------------------------------
 # SIDEBAR FILTERS STARTS
 # -------------------------------------------------------------------------------------------------
@@ -108,7 +106,6 @@ filtered_invoices = invoices[
     (invoices['invoice_date'].dt.date <= date_range[1])
 ]
 
-
 # ---------------------------------------------------------------------------------------------------------
 # SIDEBAR FILTERS ENDS
 # ---------------------------------------------------------------------------------------------------------
@@ -142,6 +139,7 @@ st.divider()
 # ------------------------------------------------------------------------------------------------------------
 # KPI METRICS ENDS
 # ------------------------------------------------------------------------------------------------------------
+
 
 # ------------------------------------------------
 # TOP 10 ARTISTS BY REVENUE STARTS
@@ -269,7 +267,6 @@ country_revenue.rename(
     inplace=True
 )
 
-
 # ------------------------- REVENUE BY COUNTRY (CHART) -----------------------
 
 st.subheader("Revenue by Country")
@@ -299,8 +296,9 @@ for bar in ax.patches:
 st.pyplot(fig)
 st.divider()
 # -----------------------------------------------------------------------------------------------------------
-# REVENUE BY COUNTRY Ends
+# REVENUE BY COUNTRY ENDS
 # -----------------------------------------------------------------------------------------------------------
+
 
 # -------------------------------
 # BUSINESS INSIGHTS
