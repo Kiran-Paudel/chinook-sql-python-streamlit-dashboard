@@ -71,27 +71,44 @@ invoices, invoice_line_detail = load_data()
 # -------------------------------------------------------------------------------------------------
 st.sidebar.header("Filters")
 
+# Add spacing
+st.sidebar.write("")
+
 # Country filter
 country_options = sorted(invoices['billing_country'].unique())
 
 selected_countries = st.sidebar.multiselect(
-    "Filter by Country",
+    "Filter by Country :",
     options=country_options,
     default=country_options  # all selected by default
 )
 
-# Date range filter
+# -------------------------------
+# DATE RANGE FILTER
+# -------------------------------
+
+# Add spacing
+st.sidebar.write("")
+
+# Add spacing
+st.sidebar.write("")
+
+# Convert to date
 min_date = invoices['invoice_date'].min().date()
 max_date = invoices['invoice_date'].max().date()
 
 date_range = st.sidebar.date_input(
-    "Select Date Range",
-    value=(min_date, max_date)
+    "Filter by Date Range :",
+    value=(min_date, max_date),
+    min_value=min_date,
+    max_value=max_date
 )
 
-# Handle incomplete date selection
-if len(date_range) != 2:
-    st.warning("Please select both start and end date")
+# Handle invalid selection
+if len(date_range) == 2:
+    start_date, end_date = date_range
+else:
+    st.warning("Please select a valid date range")
     st.stop()
 
 # ------------------------------- APPLY FILTERS -------------------------------
@@ -304,19 +321,35 @@ st.divider()
 # BUSINESS INSIGHTS
 # -------------------------------
 
-st.subheader("📌 Key Insights")
+st.markdown("## 📌 Business Insights")
 
-# Top artist
-top_artist = artist_revenue.iloc[0]
+# Check if data exists after filtering
+if filtered_invoices.empty:
+    st.warning("No data available for the selected filters.")
+else:
+    insights = []
 
-# Top country
-top_country = country_revenue.iloc[0]
+    # Top Artist
+    if not artist_revenue.empty:
+        top_artist = artist_revenue.iloc[0]
+        insights.append(
+            f"🎤 **Top Artist:** {top_artist['artist']} generated the highest revenue of **${top_artist['revenue']:,.2f}**."
+        )
 
-# Peak month
-peak_month = monthly_revenue.loc[monthly_revenue['total'].idxmax()]
+    # Top Country
+    if not country_revenue.empty:
+        top_country = country_revenue.iloc[0]
+        insights.append(
+            f"🌍 **Top Country:** {top_country['country']} contributed the most with **${top_country['revenue']:,.2f}**"
+        )
 
-st.markdown(f"""
-- 🎤 **Top Artist:** {top_artist['artist']} generated the highest revenue of **${top_artist['revenue']:,.2f}**
-- 🌍 **Top Country:** {top_country['country']} contributed the most with **${top_country['revenue']:,.2f}**
-- 📅 **Peak Month:** {peak_month['month']} recorded the highest revenue of **${peak_month['total']:,.2f}**
-""")
+    # Peak Month
+    if not monthly_revenue.empty:
+        peak_month = monthly_revenue.loc[monthly_revenue['total'].idxmax()]
+        insights.append(
+            f"📅 **Peak Month:** {peak_month['month']} recorded the highest revenue of **${peak_month['total']:,.2f}**"
+        )
+
+    # Display insights
+    for insight in insights:
+        st.markdown(f"- {insight}")

@@ -58,7 +58,7 @@ This project demonstrates end-to-end data analytics skills including data extrac
 ## 🔐 Data Handling
 
 * Secure database connection using environment variables (`.env`)
-* No credentials stored in code (industry best practice)
+* No credentials stored in code
 
 ---
 
